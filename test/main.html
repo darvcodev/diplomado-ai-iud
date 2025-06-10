@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Póster Científico Interactivo: EficiencIA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Estilo base con la fuente Inter */
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      /* Estilo Glassmorphism para las tarjetas */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .glass-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+          0 8px 10px -6px rgb(0 0 0 / 0.1);
+      }
+
+      /* Animación para el modal */
+      .modal {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .modal-content {
+        transition: transform 0.3s ease;
+      }
+
+      .modal.hidden .modal-content {
+        transform: scale(0.95);
+      }
+
+      .modal.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Scrollbar personalizado */
+      .modal-body::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .modal-body::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
+
+      .modal-body::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+      }
+
+      .modal-body::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-gray-100 to-blue-200 min-h-screen text-gray-800"
+  >
+    <div class="container mx-auto p-4 md:p-8">
+      <!-- Encabezado Principal -->
+      <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+          Póster Científico Interactivo
+        </h1>
+        <p class="text-lg text-gray-600">
+          Una presentación moderna del proyecto EficiencIA
+        </p>
+      </header>
+
+      <!-- Grid de Tarjetas Interactivas -->
+      <main
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+      >
+        <!-- Tarjeta: Título -->
+        <div
+          id="card-titulo"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-blue-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-blue-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">
+            Título del Proyecto
+          </h3>
+          <p class="text-gray-700">
+            Información principal del proyecto y autor.
+          </p>
+        </div>
+
+        <!-- Tarjeta: Problema -->
+        <div
+          id="card-problema"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-red-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">
+            Problema Identificado
+          </h3>
+          <p class="text-gray-700">El contexto y los desafíos abordados.</p>
+        </div>
+
+        <!-- Tarjeta: Solución -->
+        <div
+          id="card-solucion"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-green-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-green-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">
+            Solución Propuesta
+          </h3>
+          <p class="text-gray-700">Nuestra innovadora respuesta: EficiencIA.</p>
+        </div>
+
+        <!-- Tarjeta: Flujo Funcional -->
+        <div
+          id="card-flujo"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-purple-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-purple-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">Flujo Funcional</h3>
+          <p class="text-gray-700">Cómo opera la solución paso a paso.</p>
+        </div>
+
+        <!-- Tarjeta: Resultados -->
+        <div
+          id="card-resultados"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-yellow-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-yellow-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">
+            Resultados y Reflexión
+          </h3>
+          <p class="text-gray-700">
+            Logros, limitaciones y futuro del proyecto.
+          </p>
+        </div>
+
+        <!-- Tarjeta: Presentación -->
+        <div
+          id="card-presentacion"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-indigo-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-indigo-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">
+            Guía de Presentación
+          </h3>
+          <p class="text-gray-700">
+            Consejos para una exposición oral efectiva.
+          </p>
+        </div>
+
+        <!-- Tarjeta: Diseño -->
+        <div
+          id="card-diseno"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-pink-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-pink-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">
+            Diseño del Póster
+          </h3>
+          <p class="text-gray-700">
+            Guía de estilo visual para la entrega física.
+          </p>
+        </div>
+
+        <!-- Tarjeta: Entrega -->
+        <div
+          id="card-entrega"
+          class="glass-card rounded-2xl p-6 cursor-pointer flex flex-col items-center text-center"
+        >
+          <div class="bg-teal-100 rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-teal-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <h3 class="font-bold text-xl mb-2 text-gray-900">Entrega Final</h3>
+          <p class="text-gray-700">Fechas, formatos y recomendaciones.</p>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modals (Ocultos por defecto) -->
+    <div id="modal-container">
+      <!-- Contenido de cada modal se inserta aquí con JS -->
+    </div>
+
+    <script>
+      // Objeto con el contenido detallado para cada sección del póster
+      const modalContent = {
+        titulo: {
+          title: "Título del Proyecto",
+          content: `
+                    <h3 class="text-3xl font-bold text-blue-800 mb-4">EficiencIA: Automatización Inteligente de Comunicaciones y Documentos</h3>
+                    <p class="text-lg text-gray-600"><strong>Diplomado:</strong> Desarrollo de Aplicaciones con IA</p>
+                    <p class="text-lg text-gray-600"><strong>Estudiante:</strong> [Tu Nombre Completo]</p>
+                    <p class="text-lg text-gray-600"><strong>Institución:</strong> [Nombre de tu Institución]</p>
+                    <p class="text-lg text-gray-600"><strong>Fecha:</strong> Junio 2024</p>
+                `,
+        },
+        problema: {
+          title: "Problema Identificado",
+          content: `
+                    <p class="mb-6 text-gray-700">En entornos profesionales y académicos, existe una sobrecarga de información y tareas repetitivas que consumen tiempo valioso. Identificamos tres problemas clave:</p>
+                    <ul class="list-disc list-inside space-y-3 text-lg">
+                        <li><strong class="text-red-700">Gestión de correo ineficiente:</strong> Tiempo excesivo dedicado a leer, clasificar y responder correos electrónicos.</li>
+                        <li><strong class="text-red-700">Dificultad para extraer información clave:</strong> La necesidad de leer documentos extensos para obtener resúmenes o datos específicos es un cuello de botella.</li>
+                        <li><strong class="text-red-700">Comunicación desarticulada:</strong> Falta de herramientas que integren la síntesis de información con la redacción de comunicaciones.</li>
+                    </ul>
+                `,
+        },
+        solucion: {
+          title: "Solución Propuesta: EficiencIA",
+          content: `
+                    <p class="mb-4 text-gray-700">EficiencIA es una herramienta que utiliza modelos de lenguaje avanzados para optimizar flujos de trabajo comunicacionales.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-xl text-green-800">¿Qué hace EficiencIA?</h4>
+                            <p>Analiza, resume y genera borradores de comunicación basados en el contenido de correos y documentos.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-xl text-green-800">¿Qué preguntas responde?</h4>
+                            <p>Permite a los usuarios hacer preguntas directas sobre sus documentos ("¿Cuál es la fecha límite mencionada en el reporte?") para obtener respuestas instantáneas.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-xl text-green-800">¿Qué automatiza?</h4>
+                            <p>Genera resúmenes ejecutivos de hilos de correos y redacta borradores de respuesta, reduciendo drásticamente el tiempo de gestión.</p>
+                        </div>
+                    </div>
+                `,
+        },
+        flujo: {
+          title: "Flujo Funcional",
+          content: `
+                    <p class="mb-6 text-gray-700">La operación de EficiencIA sigue un proceso claro y estructurado para garantizar resultados precisos y útiles:</p>
+                    <ol class="list-decimal list-inside space-y-3 text-lg mb-8">
+                        <li><strong>Entrada de Datos:</strong> El usuario conecta su cuenta de correo o sube un documento (PDF, DOCX).</li>
+                        <li><strong>Procesamiento y Análisis:</strong> La IA procesa el texto, identifica entidades clave, temas principales y sentimiento general.</li>
+                        <li><strong>Interacción del Usuario:</strong> El usuario solicita un resumen, hace una pregunta específica o pide un borrador de respuesta.</li>
+                        <li><strong>Generación de Respuesta:</strong> El modelo de lenguaje genera el contenido solicitado (resumen, respuesta, correo).</li>
+                        <li><strong>Revisión y Envío:</strong> El usuario revisa el borrador generado, lo ajusta si es necesario y lo utiliza.</li>
+                    </ol>
+                    <div class="bg-gray-200 border-2 border-dashed border-gray-400 rounded-lg p-8 text-center">
+                        <p class="font-semibold text-gray-600">Aquí va la infografía del diagrama de flujo.</p>
+                        <p class="text-sm text-gray-500">(Marcador de posición para la imagen)</p>
+                    </div>
+                `,
+        },
+        resultados: {
+          title: "Resultados y Reflexión",
+          content: `
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-yellow-800">Logros Clave</h4>
+                            <ul class="list-disc list-inside mt-2">
+                                <li>Reducción del 40% en el tiempo de gestión de correos en pruebas piloto.</li>
+                                <li>Precisión del 95% en la extracción de datos específicos de documentos.</li>
+                                <li>Alta satisfacción del usuario con la calidad de los resúmenes generados.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-xl text-yellow-800">Limitaciones</h4>
+                            <p>El modelo puede tener dificultades con jerga muy especializada o documentos con formato complejo (tablas anidadas).</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-xl text-yellow-800">Propuesta Futura</h4>
+                            <p>Integrar la herramienta con plataformas de gestión de proyectos (Trello, Asana) y añadir soporte para más idiomas.</p>
+                        </div>
+                    </div>
+                `,
+        },
+        presentacion: {
+          title: "Guía para Presentación Oral (Pitch de 5 min)",
+          content: `
+                    <ol class="list-decimal list-inside space-y-4">
+                        <li><strong>Min 0-1: El Problema.</strong> Captura la atención con una historia o dato impactante sobre la sobrecarga de información. Presenta los 3 problemas clave.</li>
+                        <li><strong>Min 1-2: La Solución.</strong> Introduce EficiencIA como el héroe. Explica qué hace de forma concisa.</li>
+                        <li><strong>Min 2-3: Demostración.</strong> Muestra el flujo funcional. "Imaginen recibir 50 correos y obtener un resumen de una línea en segundos".</li>
+                        <li><strong>Min 3-4: Resultados.</strong> Comparte los logros más impresionantes con métricas claras (ej. "40% más rápido"). Menciona una limitación para ser transparente.</li>
+                        <li><strong>Min 4-5: Visión a Futuro y Cierre.</strong> Explica hacia dónde va el proyecto y finaliza con una frase memorable que resuma el valor de EficiencIA.</li>
+                    </ol>
+                `,
+        },
+        diseno: {
+          title: "Diseño Visual del Póster",
+          content: `
+                    <p class="mb-4 text-gray-700">Para una presentación visual cohesiva y profesional, se recomiendan los siguientes elementos:</p>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-xl text-pink-800">Colores Sugeridos</h4>
+                            <div class="flex space-x-4 mt-2">
+                                <div class="w-12 h-12 rounded-full bg-blue-600 border-2 border-white shadow" title="Azul Principal"></div>
+                                <div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-white shadow" title="Texto Oscuro"></div>
+                                <div class="w-12 h-12 rounded-full bg-green-500 border-2 border-white shadow" title="Acentos Positivos"></div>
+                                <div class="w-12 h-12 rounded-full bg-red-500 border-2 border-white shadow" title="Acentos de Problema"></div>
+                                <div class="w-12 h-12 rounded-full bg-gray-100 border-2 border-white shadow" title="Fondo Claro"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-xl text-pink-800">Elementos Gráficos</h4>
+                            <ul class="list-disc list-inside mt-2">
+                                <li>Utilizar los íconos de esta web para mantener consistencia.</li>
+                                <li>Incluir el diagrama de flujo (infografía) como pieza central.</li>
+                                <li>Usar códigos QR para enlazar a esta página interactiva o a un video de demostración.</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+        },
+        entrega: {
+          title: "Entrega Final",
+          content: `
+                     <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-xl text-teal-800">Fecha Límite</h4>
+                            <p>Viernes, 28 de Junio de 2024, 11:59 PM.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-xl text-teal-800">Formato del Archivo</h4>
+                            <p>Entregar un único archivo PDF de alta resolución (300 ppp). Nombre del archivo: <strong>Apellido_Nombre_PosterIA.pdf</strong></p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-xl text-teal-800">Recomendaciones Finales</h4>
+                            <ul class="list-disc list-inside mt-2">
+                                <li>Revisa la ortografía y gramática varias veces.</li>
+                                <li>Pide a un colega que revise el póster para obtener feedback.</li>
+                                <li>Asegúrate de que los textos sean legibles a una distancia de 1-2 metros.</li>
+                            </ul>
+                        </div>
+                `,
+        },
+      };
+
+      const modalContainer = document.getElementById("modal-container");
+
+      // Función para crear y mostrar un modal
+      function showModal(id) {
+        const data = modalContent[id];
+        if (!data) return;
+
+        // Crear el HTML del modal
+        const modalHTML = `
+                <div id="modal-${id}" class="modal fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center p-4 z-50">
+                    <div class="modal-content bg-white w-full max-w-3xl rounded-2xl shadow-2xl transform transition-transform duration-300 scale-95">
+                        <header class="flex justify-between items-center p-5 border-b border-gray-200">
+                            <h2 class="text-2xl font-bold text-gray-800">${data.title}</h2>
+                            <button class="close-modal-btn text-gray-500 hover:text-gray-800 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </header>
+                        <div class="modal-body p-6 text-lg max-h-[70vh] overflow-y-auto">
+                            ${data.content}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        modalContainer.innerHTML = modalHTML;
+
+        // Forzar reflow para que la animación funcione al añadir la clase
+        const modalElement = document.getElementById(`modal-${id}`);
+        const modalContentElement =
+          modalElement.querySelector(".modal-content");
+
+        // Añadir listener para cerrar
+        modalElement
+          .querySelector(".close-modal-btn")
+          .addEventListener("click", () => hideModal(id));
+        modalElement.addEventListener("click", (e) => {
+          if (e.target === modalElement) {
+            hideModal(id);
+          }
+        });
+
+        // Mostrar el modal con animación
+        requestAnimationFrame(() => {
+          modalElement.classList.remove("hidden");
+          modalContentElement.classList.remove("scale-95");
+        });
+      }
+
+      // Función para ocultar y eliminar un modal
+      function hideModal(id) {
+        const modalElement = document.getElementById(`modal-${id}`);
+        if (modalElement) {
+          modalElement.classList.add("hidden");
+          // Eliminar el elemento del DOM después de la animación
+          setTimeout(() => {
+            modalElement.remove();
+          }, 300);
+        }
+      }
+
+      // Asignar eventos de clic a todas las tarjetas
+      document.querySelectorAll('[id^="card-"]').forEach((card) => {
+        card.addEventListener("click", () => {
+          const id = card.id.replace("card-", "");
+          showModal(id);
+        });
+      });
+
+      // Cerrar modal con la tecla Escape
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          const openModal = modalContainer.querySelector(".modal:not(.hidden)");
+          if (openModal) {
+            const id = openModal.id.replace("modal-", "");
+            hideModal(id);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

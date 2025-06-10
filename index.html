@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Póster Científico: EficiencIA</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Estilos personalizados para complementar Tailwind */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0a0a1a; /* Azul marino muy oscuro */
+        background-image: radial-gradient(
+          circle at 1px 1px,
+          rgba(236, 72, 153, 0.2) 1px,
+          transparent 0
+        );
+        background-size: 20px 20px;
+        color: #e5e7eb;
+      }
+
+      /* Canvas para las partículas de fondo */
+      #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.5;
+      }
+
+      /* Estilo para el brillo de neón en las tarjetas y footer */
+      .neon-glow {
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      .neon-glow:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 5px #14b8a6, 0 0 15px #14b8a6, 0 0 25px #14b8a6,
+          0 0 45px #14b8a6;
+        border-color: #14b8a6;
+      }
+
+      /* Estilo para el modal */
+      .modal {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .modal-content {
+        background-color: rgba(
+          23,
+          37,
+          84,
+          0.8
+        ); /* Azul oscuro con transparencia */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      /* Scrollbar personalizado */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0a1a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: #ffac06;
+        border-radius: 10px;
+        border: 2px solid #0a0a1a;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #ec4899;
+      }
+
+      /* Estilos para las flechas SVG */
+      .flow-arrow {
+        position: absolute;
+        z-index: 0;
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      @keyframes dash {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      .flow-arrow line,
+      .flow-arrow path {
+        stroke-dasharray: 10;
+        animation: dash 1.5s linear infinite;
+        stroke-dashoffset: 100;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <!-- Canvas para las partículas animadas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Contenedor principal de la página -->
+    <div class="flex flex-col min-h-screen w-full overflow-x-hidden">
+      <!-- ENCABEZADO ESTILO PÓSTER -->
+      <header
+        class="w-full bg-black/30 backdrop-blur-sm py-3 px-4 md:px-8 border-b-2 border-teal-500/30 sticky top-0 z-10"
+      >
+        <div
+          class="container mx-auto flex justify-between items-center text-center"
+        >
+          <div class="text-left">
+            <h3 class="font-black text-lg text-white">
+              <img src="img/logo-eficiencia.png" alt="Logo" class="h-12" />
+            </h3>
+          </div>
+          <div class="text-white hidden sm:block">
+            <h2 class="text-md md:text-xl font-semibold">
+              II Socialización de Trabajos de Grado
+            </h2>
+            <p class="text-sm md:text-md text-gray-300">
+              Facultad de Ingeniería y C. Agrop.
+            </p>
+          </div>
+          <div class="text-right">
+            <h3 class="font-bold text-lg">
+              <img
+                src="img/logo-iud.png"
+                alt="Logo"
+                class="h-10 rounded-full"
+              />
+            </h3>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENIDO PRINCIPAL -->
+      <main class="container mx-auto p-4 md:p-8 flex-grow">
+        <!--
+              Contenedor de maquetación:
+              - En móvil (default): flex, flex-col para apilar verticalmente.
+              - En escritorio (lg): se vuelve 'relative' para posicionar las tarjetas de forma absoluta.
+            -->
+        <div class="flex flex-col lg:relative lg:h-[1100px] w-full">
+          <!-- Tarjeta 1: Introducción -->
+          <div
+            id="card-intro"
+            class="neon-glow lg:absolute lg:top-0 lg:left-0 lg:w-[28%] lg:h-[45%] backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer mb-8 lg:mb-0"
+            onclick="openModal('modal-intro')"
+          >
+            <div class="flex items-start mb-4">
+              <span class="text-4xl mr-4">1.</span>
+              <h3 class="text-2xl font-bold text-white">Introducción</h3>
+            </div>
+            <p class="text-gray-400">
+              Las alcaldías manejan grandes volúmenes de documentos que deben
+              ser interpretados y comunicados rápidamente...
+            </p>
+          </div>
+
+          <!-- Tarjeta 2: Objetivos -->
+          <div
+            id="card-obj"
+            class="neon-glow lg:absolute lg:top-0 lg:left-[32%] lg:w-[68%] lg:h-[20%] backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer mb-8 lg:mb-0"
+            onclick="openModal('modal-objetivos')"
+          >
+            <div class="flex items-start mb-4">
+              <span class="text-4xl mr-4">2.</span>
+              <h3 class="text-2xl font-bold text-white">Objetivos</h3>
+            </div>
+            <p class="text-gray-400">
+              Desarrollar un asistente documental que automatice la lectura,
+              resumen y distribución de decisiones administrativas...
+            </p>
+          </div>
+
+          <!-- Tarjeta 3: Metodología -->
+          <div
+            id="card-met"
+            class="neon-glow lg:absolute lg:top-[25%] lg:left-[32%] lg:w-[68%] lg:h-[20%] backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer mb-8 lg:mb-0"
+            onclick="openModal('modal-metodologia')"
+          >
+            <div class="flex items-start mb-4">
+              <span class="text-4xl mr-4">3.</span>
+              <h3 class="text-2xl font-bold text-white">Metodología</h3>
+            </div>
+            <p class="text-gray-400">
+              Se creó un GPT personalizado con prompts avanzados (ReAct, ICL,
+              CoT) y se integró con Make para automatización...
+            </p>
+          </div>
+
+          <!-- Tarjeta 4: Resultados -->
+          <div
+            id="card-res"
+            class="neon-glow lg:absolute lg:top-[50%] lg:left-0 lg:w-[60%] lg:h-[50%] backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer mb-8 lg:mb-0"
+            onclick="openModal('modal-resultados')"
+          >
+            <div class="flex items-start mb-4">
+              <span class="text-4xl mr-4">4.</span>
+              <h3 class="text-2xl font-bold text-white">Resultados</h3>
+            </div>
+            <p class="text-gray-400">
+              El GPT es capaz de detectar tipo de documento, extraer decisiones
+              y generar resúmenes estructurados en segundos...
+            </p>
+          </div>
+
+          <!-- Tarjeta 5: Conclusiones y Discusión -->
+          <div
+            id="card-conc"
+            class="neon-glow lg:absolute lg:top-[50%] lg:left-[64%] lg:w-[36%] lg:h-[28%] backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer mb-8 lg:mb-0"
+            onclick="openModal('modal-conclusiones')"
+          >
+            <div class="flex items-start mb-4">
+              <span class="text-4xl mr-4">5.</span>
+              <h3 class="text-2xl font-bold text-white">
+                Conclusiones y Discusión
+              </h3>
+            </div>
+            <p class="text-gray-400">
+              Alta viabilidad del uso de IA generativa en entornos públicos,
+              reduciendo tiempos de análisis y facilitando la trazabilidad...
+            </p>
+          </div>
+
+          <!-- FLECHAS DE FLUJO (SOLO VISIBLES EN ESCRITORIO) -->
+          <div class="hidden lg:block">
+            <svg
+              class="flow-arrow text-teal-400"
+              style="top: 10%; left: 28%; width: 4%; height: 10%"
+            >
+              <defs>
+                <marker
+                  id="arrowhead-1"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="0"
+                  refY="3.5"
+                  orient="auto"
+                  fill="#FFAC06"
+                >
+                  <polygon points="0 0, 10 3.5, 0 7" />
+                </marker>
+              </defs>
+              <line
+                x1="0"
+                y1="50%"
+                x2="100%"
+                y2="50%"
+                stroke="#FFAC06"
+                stroke-width="2"
+                marker-end="url(#arrowhead-1)"
+              />
+            </svg>
+            <svg
+              class="flow-arrow text-teal-400"
+              style="top: 20%; left: 65%; width: 4%; height: 5%"
+            >
+              <defs>
+                <marker
+                  id="arrowhead-2"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="0"
+                  refY="3.5"
+                  orient="auto"
+                  fill="#FFAC06"
+                >
+                  <polygon points="0 0, 10 3.5, 0 7" />
+                </marker>
+              </defs>
+              <line
+                x1="50%"
+                y1="0"
+                x2="50%"
+                y2="100%"
+                stroke="#FFAC06"
+                stroke-width="2"
+                marker-end="url(#arrowhead-2)"
+              />
+            </svg>
+            <svg
+              class="flow-arrow text-teal-400"
+              style="top: 45%; left: 30%; width: 4%; height: 5%"
+            >
+              <defs>
+                <marker
+                  id="arrowhead-3"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="0"
+                  refY="3.5"
+                  orient="auto"
+                  fill="#FFAC06"
+                >
+                  <polygon points="0 0, 10 3.5, 0 7" />
+                </marker>
+              </defs>
+              <line
+                x1="50%"
+                y1="0"
+                x2="50%"
+                y2="100%"
+                stroke="#FFAC06"
+                stroke-width="2"
+                marker-end="url(#arrowhead-3)"
+                transform="translate(10, 0) rotate(45, 0, 0)"
+              />
+            </svg>
+            <svg
+              class="flow-arrow text-pink-400"
+              style="top: 65%; left: 60%; width: 4%; height: 10%"
+            >
+              <defs>
+                <marker
+                  id="arrowhead-4"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="0"
+                  refY="3.5"
+                  orient="auto"
+                  fill="#FFAC06"
+                >
+                  <polygon points="0 0, 10 3.5, 0 7" />
+                </marker>
+              </defs>
+              <line
+                x1="0"
+                y1="50%"
+                x2="100%"
+                y2="50%"
+                stroke="#FFAC06"
+                stroke-width="2"
+                marker-end="url(#arrowhead-4)"
+              />
+            </svg>
+            <svg
+              class="flow-arrow text-pink-400"
+              style="top: 45%; left: 62%; width: 4%; height: 10%"
+            ></svg>
+          </div>
+        </div>
+      </main>
+
+      <!-- PIE DE PÁGINA PARA REFERENCIAS -->
+      <footer class="container mx-auto p-4 md:px-8 md:pb-8">
+        <div
+          class="neon-glow backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-6 cursor-pointer"
+          onclick="openModal('modal-referencias')"
+        >
+          <div class="flex items-center">
+            <span class="text-4xl mr-4">6.</span>
+            <h3 class="text-2xl font-bold text-white">Referencias</h3>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Modals (no changes, same as before) -->
+    <div
+      id="modal-intro"
+      class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50"
+    >
+      <div
+        class="modal-content border border-teal-500/50 shadow-lg shadow-teal-500/20 rounded-xl w-full max-w-2xl text-white p-8 relative transform scale-95"
+      >
+        <button
+          onclick="closeModal('modal-intro')"
+          class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white"
+        >
+          &times;
+        </button>
+        <h2 class="text-3xl font-bold mb-4 text-teal-400">
+          🧭 1. Introducción
+        </h2>
+        <p class="text-gray-300 leading-relaxed">
+          Las alcaldías locales manejan grandes volúmenes de documentos
+          administrativos que deben ser interpretados, resumidos y comunicados
+          rápidamente.<br /><br />EficiencIA es un asistente de IA generativa
+          entrenado para analizar actas, resoluciones e informes, extraer
+          decisiones clave y generar resúmenes o correos institucionales
+          automatizados.
+        </p>
+      </div>
+    </div>
+    <div
+      id="modal-objetivos"
+      class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50"
+    >
+      <div
+        class="modal-content border border-teal-500/50 shadow-lg shadow-teal-500/20 rounded-xl w-full max-w-2xl text-white p-8 relative transform scale-95"
+      >
+        <button
+          onclick="closeModal('modal-objetivos')"
+          class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white"
+        >
+          &times;
+        </button>
+        <h2 class="text-3xl font-bold mb-4 text-teal-400">🎯 2. Objetivos</h2>
+        <div class="text-gray-300 leading-relaxed space-y-4">
+          <div>
+            <h4 class="font-semibold text-white">General:</h4>
+            <p>
+              Desarrollar un asistente documental basado en IA generativa que
+              automatice la lectura, resumen y distribución institucional de
+              decisiones administrativas.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-semibold text-white">Específicos:</h4>
+            <ul class="list-disc list-inside space-y-2 mt-2">
+              <li>Analizar documentos cargados para extraer datos clave.</li>
+              <li>
+                Responder consultas específicas sobre decisiones, montos y
+                responsables.
+              </li>
+              <li>
+                Integrar funciones de envío institucional mediante Make/n8n.
+              </li>
+              <li>
+                Aplicar prompting avanzado y personalización del comportamiento
+                del modelo.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      id="modal-metodologia"
+      class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50"
+    >
+      <div
+        class="modal-content border border-teal-500/50 shadow-lg shadow-teal-500/20 rounded-xl w-full max-w-2xl text-white p-8 relative transform scale-95"
+      >
+        <button
+          onclick="closeModal('modal-metodologia')"
+          class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white"
+        >
+          &times;
+        </button>
+        <h2 class="text-3xl font-bold mb-4 text-teal-400">🛠️ 3. Metodología</h2>
+        <ul
+          class="list-disc list-inside space-y-3 text-gray-300 leading-relaxed"
+        >
+          <li>
+            Se creó un <strong>GPT personalizado</strong> con instrucciones
+            estructuradas para guiar su comportamiento.
+          </li>
+          <li>
+            Se diseñaron prompts avanzados como
+            <strong>ReAct</strong> (Reasoning and Acting),
+            <strong>ICL</strong> (In-Context Learning) y
+            <strong>CoT</strong> (Chain of Thought) para cada necesidad
+            funcional.
+          </li>
+          <li>
+            Se usó <strong>Make</strong> para automatizar el flujo de envío de
+            resúmenes por correo electrónico.
+          </li>
+          <li>
+            Se incluyó validación de destinatario y una estructura
+            <strong>HTML</strong> para el cuerpo del mensaje, garantizando una
+            comunicación formal.
+          </li>
+          <li>
+            Se probaron diferentes escenarios de uso con documentos
+            administrativos simulados.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      id="modal-resultados"
+      class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50"
+    >
+      <div
+        class="modal-content border border-teal-500/50 shadow-lg shadow-teal-500/20 rounded-xl w-full max-w-2xl text-white p-8 relative transform scale-95"
+      >
+        <button
+          onclick="closeModal('modal-resultados')"
+          class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white"
+        >
+          &times;
+        </button>
+        <h2 class="text-3xl font-bold mb-4 text-teal-400">📊 4. Resultados</h2>
+        <p class="mb-4 text-gray-300">
+          El GPT personalizado “EficiencIA” es capaz de:
+        </p>
+        <ul
+          class="list-disc list-inside space-y-3 text-gray-300 leading-relaxed"
+        >
+          <li>
+            Detectar tipo de documento, responsables, fechas y otros metadatos
+            clave.
+          </li>
+          <li>
+            Extraer de forma precisa decisiones, acuerdos, compromisos y montos.
+          </li>
+          <li>
+            Generar resúmenes estructurados y coherentes en cuestión de
+            segundos.
+          </li>
+          <li>
+            Interactuar con el usuario para preguntar a qué correo enviar el
+            resumen y conectarse a Make para el envío.
+          </li>
+          <li class="text-teal-300">
+            💡 Se simularon correos institucionales con formato HTML con un 100%
+            de éxito en las pruebas.
+          </li>
+          <li>
+            Se diseñó un flujo visual funcional e intuitivo, listo para ser
+            implementado y usado en alcaldías.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      id="modal-conclusiones"
+      class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50"
+    >
+      <div
+        class="modal-content border border-teal-500/50 shadow-lg shadow-teal-500/20 rounded-xl w-full max-w-2xl text-white p-8 relative transform scale-95"
+      >
+        <button
+          onclick="closeModal('modal-conclusiones')"
+          class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white"
+        >
+          &times;
+        </button>
+        <h2 class="text-3xl font-bold mb-4 text-teal-400">
+          🧠 5. Conclusiones y Discusión
+        </h2>
+        <div class="text-gray-300 leading-relaxed space-y-4">
+          <p>
+            Se demostró la <strong>alta viabilidad</strong> del uso de IA
+            generativa en entornos públicos. EficiencIA logra reducir
+            significativamente el tiempo de análisis de documentos y facilita la
+            trazabilidad de decisiones.
+          </p>
+          <div>
+            <h4 class="font-semibold text-pink-400">Limitaciones:</h4>
+            <ul class="list-disc list-inside space-y-1 mt-2">
+              <li>
+                No detecta errores de redacción u omisiones en los documentos
+                fuente.
+              </li>
+              <li>
+                La calidad de la extracción depende de la claridad del contenido
+                original.
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold text-teal-300">Trabajo Futuro:</h4>
+            <ul class="list-disc list-inside space-y-1 mt-2">
+              <li>
+                Integrar una interfaz web dedicada para la carga masiva de
+                documentos.
+              </li>
+              <li>
+                Registrar trazabilidad de respuestas y análisis por usuario.
+              </li>
+              <li>
+                Vincular con APIs de sistemas de gestión documental de alcaldías
+                locales.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      id="modal-referencias"
+      class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50"
+    >
+      <div
+        class="modal-content border border-teal-500/50 shadow-lg shadow-teal-500/20 rounded-xl w-full max-w-2xl text-white p-8 relative transform scale-95"
+      >
+        <button
+          onclick="closeModal('modal-referencias')"
+          class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white"
+        >
+          &times;
+        </button>
+        <h2 class="text-3xl font-bold mb-4 text-teal-400">📚 6. Referencias</h2>
+        <ul
+          class="list-disc list-inside space-y-3 text-gray-300 leading-relaxed"
+        >
+          <li>
+            Actas simuladas de alcaldías locales (documentos ficticios creados
+            con Claude para el entrenamiento).
+          </li>
+          <li>
+            Guías de prompting avanzado y técnicas de optimización de modelos
+            (OpenAI, 2024).
+          </li>
+          <li>
+            Documentación oficial de la API de Make (anteriormente Integromat).
+          </li>
+          <li>
+            Documentación oficial de OpenAPI 3.1 para la definición de acciones
+            de GPT.
+          </li>
+          <li>
+            Reglamento de comités locales de contratación (modelo académico
+            utilizado como base).
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      // --- Lógica para los Modales ---
+      function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        modal.querySelector(".modal-content").classList.remove("scale-95");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.add("opacity-0");
+        modal.querySelector(".modal-content").classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("pointer-events-none");
+          const anyModalOpen = document.querySelector(".modal:not(.opacity-0)");
+          if (!anyModalOpen) {
+            document.body.style.overflow = "auto";
+          }
+        }, 300);
+      }
+
+      // --- Lógica para las Partículas Animadas ---
+      const canvas = document.getElementById("particle-canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let particlesArray;
+      const particleProps = {
+        count: 100,
+        radius: 1.5,
+        color: "#EC4899",
+        speed: 0.5,
+        lineDistance: 120,
+      };
+
+      class Particle {
+        constructor(x, y, directionX, directionY, size, color) {
+          this.x = x;
+          this.y = y;
+          this.directionX = directionX;
+          this.directionY = directionY;
+          this.size = size;
+          this.color = color;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+        update() {
+          if (this.x > canvas.width || this.x < 0) {
+            this.directionX = -this.directionX;
+          }
+          if (this.y > canvas.height || this.y < 0) {
+            this.directionY = -this.directionY;
+          }
+          this.x += this.directionX;
+          this.y += this.directionY;
+          this.draw();
+        }
+      }
+
+      function init() {
+        particlesArray = [];
+        for (let i = 0; i < particleProps.count; i++) {
+          let size = Math.random() * particleProps.radius + 1;
+          let x = Math.random() * (innerWidth - size * 2 - size * 2) + size * 2;
+          let y =
+            Math.random() * (innerHeight - size * 2 - size * 2) + size * 2;
+          let directionX =
+            Math.random() * particleProps.speed - particleProps.speed / 2;
+          let directionY =
+            Math.random() * particleProps.speed - particleProps.speed / 2;
+          particlesArray.push(
+            new Particle(
+              x,
+              y,
+              directionX,
+              directionY,
+              size,
+              particleProps.color
+            )
+          );
+        }
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        particlesArray.forEach((p) => p.update());
+        connect();
+      }
+
+      function connect() {
+        let opacityValue = 1;
+        for (let a = 0; a < particlesArray.length; a++) {
+          for (let b = a; b < particlesArray.length; b++) {
+            let distance =
+              (particlesArray[a].x - particlesArray[b].x) *
+                (particlesArray[a].x - particlesArray[b].x) +
+              (particlesArray[a].y - particlesArray[b].y) *
+                (particlesArray[a].y - particlesArray[b].y);
+            if (
+              distance <
+              particleProps.lineDistance * particleProps.lineDistance
+            ) {
+              opacityValue =
+                1 -
+                distance /
+                  (particleProps.lineDistance * particleProps.lineDistance);
+              ctx.strokeStyle = `rgba(236, 72, 153, ${opacityValue})`; // Magenta
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+              ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      window.addEventListener("resize", () => {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        init();
+      });
+
+      init();
+      animate();
+
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              magenta: { 500: "#FFAC06" },
+              teal: { 400: "#2DD4BF", 500: "#14B8A6" },
+            },
+          },
+        },
+      };
+    </script>
+  </body>
+</html>
