@@ -104,6 +104,53 @@
         animation: dash 1.5s linear infinite;
         stroke-dashoffset: 100;
       }
+
+      /* Ajustes específicos para imágenes en móvil */
+      .card-image {
+        position: absolute;
+        right: -30px;
+        bottom: -20px;
+      }
+
+      @media (max-width: 1023px) {
+        .card-image {
+          position: static;
+          right: auto;
+          bottom: auto;
+          margin-top: 1rem;
+          display: block;
+          max-width: 100%;
+          height: auto;
+        }
+      }
+
+      /* Ajustes específicos para la sección de resultados en móvil */
+      .results-images {
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      @media (min-width: 1024px) {
+        .results-images {
+          flex-direction: row;
+          gap: 1rem;
+          margin-top: 4rem;
+        }
+      }
+
+      .results-gpt-image {
+        width: 100%;
+        max-width: 300px;
+        border-radius: 10px;
+        border: 3px solid #ffac06;
+      }
+
+      @media (min-width: 1024px) {
+        .results-gpt-image {
+          width: 400px;
+        }
+      }
     </style>
   </head>
   <body class="antialiased">
@@ -169,7 +216,7 @@
             <img
               src="img/introduccion.png"
               alt="Introducción"
-              style="position: absolute; right: -30px; bottom: -20px"
+              class="card-image"
             />
           </div>
 
@@ -187,11 +234,7 @@
               Desarrollar un asistente documental que automatice la lectura,
               resumen y distribución de decisiones administrativas...
             </p>
-            <img
-              src="img/objetivos.png"
-              alt="Objetivos"
-              style="position: absolute; right: -30px; bottom: -20px"
-            />
+            <img src="img/objetivos.png" alt="Objetivos" class="card-image" />
           </div>
 
           <!-- Tarjeta 3: Metodología -->
@@ -211,7 +254,7 @@
             <img
               src="img/metodologia.png"
               alt="Metodología"
-              style="position: absolute; right: -30px; bottom: -20px"
+              class="card-image"
             />
           </div>
 
@@ -229,15 +272,11 @@
               El GPT es capaz de detectar tipo de documento, extraer decisiones
               y generar resúmenes estructurados en segundos...
             </p>
-            <div class="flex items-center gap-4 mt-16">
+            <div class="flex items-center results-images">
               <img
                 src="img/gpt-eficiencia.png"
                 alt="GPT EficiencIA"
-                style="
-                  width: 400px;
-                  border-radius: 10px;
-                  border: 3px solid #ffac06;
-                "
+                class="results-gpt-image"
               />
               <img src="img/resultados.png" alt="Resultados" />
             </div>
@@ -262,7 +301,7 @@
             <img
               src="img/conclusiones.png"
               alt="Resultados"
-              style="position: absolute; right: -30px; bottom: -20px"
+              class="card-image"
             />
           </div>
 
@@ -528,7 +567,7 @@
         </button>
         <h2 class="text-3xl font-bold mb-4 text-teal-400">📊 4. Resultados</h2>
         <p class="mb-4 text-gray-300">
-          El GPT personalizado <b>“EficiencIA”</b> es capaz de:
+          El GPT personalizado <b>"EficiencIA"</b> es capaz de:
         </p>
         <ul
           class="list-disc list-inside space-y-3 text-gray-300 leading-relaxed"
